@@ -1,0 +1,15 @@
+{
+    "appId": "mcp-electron",
+    "files": ["dist-electron/**/*", "dist-react/**/*"],
+    "icon": "./desktopIcon.png",
+    "mac": {
+        "target": "dmg"
+    },
+    "linux": {
+        "target": ["AppImage"],
+        "category": "Utility"
+    },
+    "win": {
+        "target": ["msi", "portable"]
+    }
+}
