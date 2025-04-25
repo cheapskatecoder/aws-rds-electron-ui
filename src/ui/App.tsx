@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "@mantine/core/styles.css";
+import "./App.css";
+import { Route, Routes, Navigate } from "react-router";
+import DashboardPage from "./pages/Dashboard";
+import SignupPage from "./pages/Signup";
+import { isAuthenticated } from "./utils";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { Center, Loader, MantineProvider, createTheme } from "@mantine/core";
 
-function App() {
-  const [count, setCount] = useState(0)
+const theme = createTheme({
+  // you can customize the theme if needed
+});
+
+const App: React.FC = () => {
+  const [isAuth, setIsAuth] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if user is authenticated
+    const checkAuth = async () => {
+      try {
+        const authResult = await isAuthenticated();
+        setIsAuth(authResult);
+      } catch (error) {
+        setIsAuth(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React 1</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <MantineProvider theme={theme} defaultColorScheme="light">
+      {isLoading ? (
+        <Center
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <Loader size="xl" color="blue" />
+        </Center>
+      ) : (
+        <Routes>
+          {isAuth ? (
+            <Route path="/" element={<DashboardPage />} />
+          ) : (
+            <>
+              <Route path="/" element={<Navigate to="/signup" replace />} />
+              <Route path="/signup" element={<SignupPage />} />
+            </>
+          )}
+          {/* Catch all route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      )}
+    </MantineProvider>
+  );
+};
 
-export default App
+export default App;
