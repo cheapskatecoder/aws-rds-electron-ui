@@ -3,8 +3,9 @@ import "./App.css";
 import { Route, Routes, Navigate } from "react-router";
 import DashboardPage from "./pages/Dashboard";
 import SignupPage from "./pages/Signup";
-import { axiosInstance } from "./utils";
-import React, { useEffect, useState } from "react";
+import { isAuthenticated } from "./utils";
+import * as React from "react";
+import { useEffect, useState } from "react";
 import { Center, Loader, MantineProvider, createTheme } from "@mantine/core";
 
 const theme = createTheme({
@@ -12,35 +13,28 @@ const theme = createTheme({
 });
 
 const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log("useEffect running, isLoading:", isLoading);
-
-    axiosInstance
-      .get("/")
-      .then((res) => {
-        console.log("token is valid");
-        console.log(res);
-        setIsAuthenticated(false);
-      })
-      .catch((err) => {
-        setIsAuthenticated(false);
-        console.log("error verifying token", err);
-      })
-      .finally(() => {
-        console.log("Setting isLoading to false");
+    // Check if user is authenticated
+    const checkAuth = async () => {
+      try {
+        const authResult = await isAuthenticated();
+        setIsAuth(authResult);
+      } catch (error) {
+        setIsAuth(false);
+      } finally {
         setIsLoading(false);
-      });
-  }, []);
+      }
+    };
 
-  console.log("Rendering App, isLoading:", isLoading);
+    checkAuth();
+  }, []);
 
   return (
     <MantineProvider theme={theme} defaultColorScheme="light">
-      {/* show a loader if the auth request is being verified */}
-      {isLoading && (
+      {isLoading ? (
         <Center
           style={{
             position: "fixed",
@@ -51,12 +45,9 @@ const App: React.FC = () => {
         >
           <Loader size="xl" color="blue" />
         </Center>
-      )}
-
-      {/* show the dashboard page if the user is authenticated */}
-      {!isLoading && (
+      ) : (
         <Routes>
-          {isAuthenticated ? (
+          {isAuth ? (
             <Route path="/" element={<DashboardPage />} />
           ) : (
             <>
@@ -64,6 +55,8 @@ const App: React.FC = () => {
               <Route path="/signup" element={<SignupPage />} />
             </>
           )}
+          {/* Catch all route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       )}
     </MantineProvider>

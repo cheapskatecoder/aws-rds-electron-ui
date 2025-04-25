@@ -20,6 +20,7 @@
     "@mantine/core": "^7.17.4",
     "@mantine/form": "^7.17.4",
     "@mantine/hooks": "^7.17.4",
+    "@tabler/icons-react": "^3.31.0",
     "@typescript-eslint/parser": "^5.62.0",
     "axios": "^1.8.4",
     "prettier": "^3.5.3",
@@ -41,7 +42,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "npm-run-all": "^4.1.5",
-    "typescript": "^4.9.5",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.26.1",
     "vite": "^6.3.1"
   }
