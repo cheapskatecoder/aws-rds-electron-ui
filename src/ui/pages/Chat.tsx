@@ -9,6 +9,7 @@ import {
   Group,
   ActionIcon,
   Textarea,
+  Box,
 } from "@mantine/core";
 import { IconSend } from "@tabler/icons-react";
 import { axiosInstance, Message } from "../utils";
@@ -157,11 +158,66 @@ const Chat = ({ chatId, threadId }: ChatProps) => {
           <ScrollArea style={{ flex: 1 }} viewportRef={scrollAreaRef}>
             <Stack gap="lg">
               {messages.length === 0 ? (
-                <Center style={{ height: 200 }}>
-                  <Text c="dimmed">
-                    No messages yet. Start by asking about AWS RDS services!
-                  </Text>
-                </Center>
+                <Box
+                  style={{
+                    height: "auto",
+                    minHeight: 400,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Paper p="lg" withBorder maw={700} w="100%" mx="auto">
+                    <Stack align="flex-start">
+                      <Text size="lg" fw={700} c="blue">
+                        Welcome to AWS RDS Expert!
+                      </Text>
+                      <Text ta="left">
+                        I can help you manage your RDS databases. Here are the
+                        actions I can perform:
+                      </Text>
+                      <Stack gap="xs" align="flex-start" w="100%">
+                        <Text fw={500}>• list_rds_instances:</Text>
+                        <Text ml="md">Show your current RDS databases.</Text>
+
+                        <Text fw={500}>• describe_rds_instance:</Text>
+                        <Text ml="md">
+                          Get detailed information about a specific database.
+                        </Text>
+
+                        <Text fw={500}>• create_rds_instance:</Text>
+                        <Text ml="md">
+                          Create a new database (MySQL, PostgreSQL, SQL Server,
+                          etc.). I'll ask for required parameters.
+                        </Text>
+
+                        <Text fw={500}>• stop_rds_instance:</Text>
+                        <Text ml="md">Stop a running database.</Text>
+
+                        <Text fw={500}>• start_rds_instance:</Text>
+                        <Text ml="md">Start a stopped database.</Text>
+
+                        <Text fw={500}>• modify_rds_instance:</Text>
+                        <Text ml="md">
+                          Change settings like instance class or storage size.
+                        </Text>
+
+                        <Text fw={500}>• delete_rds_instance:</Text>
+                        <Text ml="md">
+                          Delete a database (I'll confirm and ask about final
+                          snapshots).
+                        </Text>
+
+                        <Text fw={500}>• list_instance_classes:</Text>
+                        <Text ml="md">
+                          Show available hardware options for your database.
+                        </Text>
+                      </Stack>
+                      <Text mt="md" fw={500} ta="left">
+                        Ask a question to get started!
+                      </Text>
+                    </Stack>
+                  </Paper>
+                </Box>
               ) : (
                 messages.map((message) => (
                   <ChatMessage key={message.id} message={message} />
