@@ -7,7 +7,7 @@
     },
     "linux": {
         "target": ["AppImage"],
-        "category": "Utility"
+        "executableArgs": ["--no-sandbox"]
     },
     "win": {
         "target": ["msi", "portable"]

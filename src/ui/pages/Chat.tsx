@@ -10,8 +10,9 @@ import {
   ActionIcon,
   Textarea,
   Box,
+  Alert,
 } from "@mantine/core";
-import { IconSend } from "@tabler/icons-react";
+import { IconSend, IconAlertCircle } from "@tabler/icons-react";
 import { axiosInstance, Message } from "../utils";
 import ChatMessage from "../components/ChatMessage";
 
@@ -150,6 +151,17 @@ const Chat = ({ chatId, threadId }: ChatProps) => {
         shadow="xs"
         p="md"
       >
+        {error && (
+          <Alert
+            icon={<IconAlertCircle size={16} />}
+            color="red"
+            title="Error"
+            withCloseButton
+            onClose={() => setError("")}
+          >
+            {error}
+          </Alert>
+        )}
         {loading ? (
           <Center style={{ height: "100%" }}>
             <Loader size="lg" />

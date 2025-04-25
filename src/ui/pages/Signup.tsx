@@ -12,7 +12,6 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 import { axiosInstance, loginUser } from "../utils";
-import { useNavigate } from "react-router";
 
 const SignupPage = () => {
   const [activeTab, setActiveTab] = useState<string | null>("signup");

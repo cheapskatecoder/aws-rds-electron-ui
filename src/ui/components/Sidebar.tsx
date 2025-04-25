@@ -4,18 +4,14 @@ import {
   Text,
   Button,
   Title,
-  TextInput,
-  ActionIcon,
   Divider,
   ScrollArea,
   Loader,
   Center,
-  Modal,
   Stack,
 } from "@mantine/core";
-import { IconEdit, IconMessagePlus } from "@tabler/icons-react";
+import { IconMessagePlus } from "@tabler/icons-react";
 import { axiosInstance, Chat, logoutUser } from "../utils";
-import { useDisclosure } from "@mantine/hooks";
 
 interface SidebarProps {
   onChatSelect: (chatId: number, threadId: number) => void;
@@ -26,9 +22,6 @@ const Sidebar = ({ onChatSelect, selectedChatId }: SidebarProps) => {
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [opened, { open, close }] = useDisclosure(false);
-  const [editingChat, setEditingChat] = useState<Chat | null>(null);
-  const [chatName, setChatName] = useState("");
 
   // Load chats on component mount
   useEffect(() => {
@@ -70,37 +63,6 @@ const Sidebar = ({ onChatSelect, selectedChatId }: SidebarProps) => {
       }
     } catch (error) {
       setError("Failed to create chat");
-    }
-  };
-
-  const handleRenameClick = (chat: Chat) => {
-    setEditingChat(chat);
-    setChatName(chat.chat_name || "");
-    open();
-  };
-
-  const renameChat = async () => {
-    if (!editingChat) return;
-
-    try {
-      const response = await axiosInstance.patch(
-        `/api/chats/${editingChat.id}`,
-        {
-          chat_name: chatName,
-        },
-      );
-
-      if (response.data.status === "success") {
-        // Update chat in the list
-        setChats(
-          chats.map((c) =>
-            c.id === editingChat.id ? { ...c, chat_name: chatName } : c,
-          ),
-        );
-        close();
-      }
-    } catch (error) {
-      setError("Failed to rename chat");
     }
   };
 
@@ -165,17 +127,6 @@ const Sidebar = ({ onChatSelect, selectedChatId }: SidebarProps) => {
                   justify="space-between"
                   fullWidth
                   onClick={() => handleChatClick(chat)}
-                  rightSection={
-                    <ActionIcon
-                      variant="transparent"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRenameClick(chat);
-                      }}
-                    >
-                      <IconEdit size={16} />
-                    </ActionIcon>
-                  }
                 >
                   <Text truncate style={{ maxWidth: "180px" }}>
                     {chat.chat_name || `Chat ${chat.id}`}
@@ -202,19 +153,6 @@ const Sidebar = ({ onChatSelect, selectedChatId }: SidebarProps) => {
           Logout
         </Button>
       </Box>
-
-      {/* Rename Chat Modal */}
-      <Modal opened={opened} onClose={close} title="Rename Chat">
-        <Stack>
-          <TextInput
-            label="Chat Name"
-            placeholder="Enter chat name"
-            value={chatName}
-            onChange={(e) => setChatName(e.target.value)}
-          />
-          <Button onClick={renameChat}>Save</Button>
-        </Stack>
-      </Modal>
     </Box>
   );
 };
