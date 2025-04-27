@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 import { axiosInstance, loginUser } from "../utils";
+import { useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
   const [activeTab, setActiveTab] = useState<string | null>("signup");
@@ -20,6 +21,7 @@ const SignupPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +71,8 @@ const SignupPage = () => {
         // Token is already stored in localStorage by loginUser
         // Redirect to dashboard with a small delay to ensure state updates
         setTimeout(() => {
-          window.location.href = "/";
+          navigate("/");
+          window.location.reload();
         }, 100);
       } else {
         setError(response.message || "Login failed");

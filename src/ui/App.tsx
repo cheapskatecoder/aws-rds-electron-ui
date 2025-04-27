@@ -1,6 +1,6 @@
 import "@mantine/core/styles.css";
 import "./App.css";
-import { Route, Routes, Navigate } from "react-router";
+import { Route, Routes, Navigate } from "react-router-dom";
 import DashboardPage from "./pages/Dashboard";
 import SignupPage from "./pages/Signup";
 import { isAuthenticated } from "./utils";
@@ -8,9 +8,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Center, Loader, MantineProvider, createTheme } from "@mantine/core";
 
-const theme = createTheme({
-  // you can customize the theme if needed
-});
+const theme = createTheme({});
 
 const App: React.FC = () => {
   const [isAuth, setIsAuth] = useState(false);

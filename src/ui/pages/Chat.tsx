@@ -12,7 +12,7 @@ import {
   Box,
   Alert,
 } from "@mantine/core";
-import { IconSend, IconAlertCircle } from "@tabler/icons-react";
+import Icon from "../components/Icon";
 import { axiosInstance, Message } from "../utils";
 import ChatMessage from "../components/ChatMessage";
 
@@ -153,7 +153,7 @@ const Chat = ({ chatId, threadId }: ChatProps) => {
       >
         {error && (
           <Alert
-            icon={<IconAlertCircle size={16} />}
+            icon={<Icon icon="AlertCircle" size={16} />}
             color="red"
             title="Error"
             withCloseButton
@@ -246,28 +246,37 @@ const Chat = ({ chatId, threadId }: ChatProps) => {
       </Paper>
 
       {/* Input area */}
-      <Group align="flex-end">
-        <Textarea
-          placeholder="Ask about AWS RDS..."
-          value={userMessage}
-          onChange={(e) => setUserMessage(e.target.value)}
-          onKeyDown={handleKeyPress}
-          autosize
-          minRows={1}
-          maxRows={5}
-          style={{ flex: 1 }}
-          disabled={sending}
-        />
-        <ActionIcon
-          size="lg"
-          color="blue"
-          variant="filled"
-          onClick={sendMessage}
-          disabled={sending || !userMessage.trim()}
+      <Box mt="md">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendMessage();
+          }}
         >
-          <IconSend size={18} />
-        </ActionIcon>
-      </Group>
+          <Group align="flex-end">
+            <Textarea
+              placeholder="Type your message..."
+              value={userMessage}
+              onChange={(e) => setUserMessage(e.target.value)}
+              onKeyDown={handleKeyPress}
+              autosize
+              minRows={1}
+              maxRows={5}
+              style={{ flex: 1 }}
+              disabled={sending}
+            />
+            <ActionIcon
+              type="submit"
+              variant="filled"
+              color="blue"
+              size="lg"
+              disabled={sending || !userMessage.trim()}
+            >
+              <Icon icon="Send" size={18} />
+            </ActionIcon>
+          </Group>
+        </form>
+      </Box>
     </Stack>
   );
 };

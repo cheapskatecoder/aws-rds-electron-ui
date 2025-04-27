@@ -1,54 +1,72 @@
-# React + TypeScript + Vite
+# MCP Electron
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is an Electron application built with React, Vite, and TypeScript.
 
-Currently, two official plugins are available:
+## Icon Optimization
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project implements an optimized approach for using Tabler icons with on-demand loading, which significantly reduces bundle size and improves performance.
 
-## Expanding the ESLint configuration
+### Implementation Details
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. We use `@iconify/react` for on-demand icon loading
+2. The custom `Icon` component (`src/ui/components/Icon.tsx`) provides a simple interface for loading Tabler icons
+3. Icons are loaded dynamically and only when needed, rather than importing the entire icon library
+4. Code splitting is configured to optimize bundle size
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Usage
+
+Instead of importing icons directly from `@tabler/icons-react`:
+
+```tsx
+// Old approach (imports entire icon bundle)
+import { IconSend, IconAlertCircle } from "@tabler/icons-react";
+
+// Usage
+<IconSend size={18} />;
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Use the custom Icon component:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```tsx
+// New optimized approach (on-demand loading)
+import Icon from "../components/Icon";
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+// Usage
+<Icon icon="Send" size={18} />;
+```
+
+### Benefits
+
+- **Smaller bundle size**: Only loads the icons that are actually used
+- **Improved performance**: Reduces initial load time
+- **Simplified API**: Consistent interface for all icons
+- **Code splitting**: Icons are loaded in separate chunks
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Distribution
+
+```bash
+# Build for macOS
+npm run dist:mac
+
+# Build for Linux
+npm run dist:linux
+
+# Build for Windows
+npm run dist:win
 ```

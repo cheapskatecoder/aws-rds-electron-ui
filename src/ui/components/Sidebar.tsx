@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Text,
@@ -10,7 +11,7 @@ import {
   Center,
   Stack,
 } from "@mantine/core";
-import { IconMessagePlus } from "@tabler/icons-react";
+import Icon from "./Icon";
 import { axiosInstance, Chat, logoutUser } from "../utils";
 
 interface SidebarProps {
@@ -22,6 +23,7 @@ const Sidebar = ({ onChatSelect, selectedChatId }: SidebarProps) => {
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   // Load chats on component mount
   useEffect(() => {
@@ -94,7 +96,7 @@ const Sidebar = ({ onChatSelect, selectedChatId }: SidebarProps) => {
 
       <Box>
         <Button
-          leftSection={<IconMessagePlus size={16} />}
+          leftSection={<Icon icon="MessagePlus" size={16} />}
           fullWidth
           onClick={createNewChat}
         >
@@ -147,7 +149,8 @@ const Sidebar = ({ onChatSelect, selectedChatId }: SidebarProps) => {
           fullWidth
           onClick={async () => {
             await logoutUser();
-            window.location.href = "/signup";
+            navigate("/signup");
+            window.location.reload();
           }}
         >
           Logout
